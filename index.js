@@ -75,14 +75,23 @@ app.get("/fsbo", (req, res) => {
                         let address = xl('.address-copy .address').text()
                         let price = xl('.address-copy .price').text()
                         let c_name = xl('#sellerModal div div .modal-body .row').html()
+                        let description = xl('.property-description').html()
+                        obj['price'] = price
+                        obj['description'] = description
                         obj['details'] = { price: price, contact: c_name }
+
                         this.result.push(obj);
                         const today = new Date();
+                        // console.log(description)
                         knex('properties').insert({
+                            origin: 'fsbo.com',
+                            resource_link: obj.resource_link,
                             name: name,
                             address: address,
+                            description: description,
                             contact_html: c_name,
                             images: obj.resource_image,
+                            price: obj.price,
                             created_at: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
                         }).then( function (result) {
                             console.log(result)
